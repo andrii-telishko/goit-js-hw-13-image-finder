@@ -43,6 +43,7 @@ body {
   margin-top: 10px;
   flex-basis: calc(100% / 4 - 10px);
   width: 50px;
+  border: 2px solid rgb(230, 229, 229);
 }
 
 .image {
@@ -54,6 +55,7 @@ body {
 .stats {
   display: flex;
   justify-content: center;
+  padding-top: 10px;
 }
 
 .stats-item {
