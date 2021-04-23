@@ -15,6 +15,7 @@ let scrollValue = 0;
 refs.searchForm.addEventListener('submit', onSearch);
 loadMoreButton.refs.loadMoreBtn.addEventListener('click', fetchArticles);
 loadMoreButton.refs.goBackBtn.addEventListener('click', scrollUp);
+refs.resetBtn.addEventListener('click', resetPage)
 
 function onSearch(event) {
     event.preventDefault();
@@ -68,6 +69,12 @@ function scrollUp() {
             top: 0,
             behavior: 'smooth'
         });
+}
+
+function resetPage() {
+    refs.input.value = "";
+    clearArticlesContainer();
+    loadMoreButton.hide();
 }
 
 

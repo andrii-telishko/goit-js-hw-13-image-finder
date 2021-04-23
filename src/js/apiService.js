@@ -4,7 +4,7 @@ const BASE_URL = 'https://pixabay.com/api';
 
 export default class UploadImageService {
      constructor() {
-    this.searchQuery = '';
+         this.searchQuery = '';
          this.pageNumber = 1;
          this.refs = this.getRefs();
     }
@@ -12,7 +12,8 @@ export default class UploadImageService {
     getRefs() {
         const refs = {
             submitBtnText: document.querySelector('.submit-button-text'),
-            searchBtnSpinner: document.querySelector('.search-button-spinner')
+            searchBtnSpinner: document.querySelector('.search-button-spinner'),
+
         }
         return refs;
     }
