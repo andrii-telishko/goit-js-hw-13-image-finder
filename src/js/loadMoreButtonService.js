@@ -22,7 +22,7 @@ export default class LoadMoreButton {
     
     disable() {
     this.refs.loadMoreBtn.disabled = true;
-    this.refs.loadMoreBtnText.textContent = 'Loading';
+    this.refs.loadMoreBtnText.textContent = 'Loading...';
     this.refs.loadBtnSpinner.classList.remove('is-hidden');
     }
     

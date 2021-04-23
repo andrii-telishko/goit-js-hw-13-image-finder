@@ -30,12 +30,6 @@ body {
   cursor: pointer;
 }
 
-.disabled {
-  background-color: grey;
-  color: black;
-  cursor: default;
-}
-
 .gallery-list {
   display: flex;
   flex-wrap: wrap;

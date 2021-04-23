@@ -1,9 +1,10 @@
 import './styles.css';
 import galleryListTpl from './templates/image-list.hbs';
 import UploadImageService from './js/apiService';
-import LoadMoreButton from './js/loadMoreButtonService'
+import LoadMoreButton from './js/loadMoreButtonService';
+import makeError from './js/makeError'
 
-console.log(galleryListTpl);
+
 
 const refs = {
     input: document.querySelector('[name="query"]'),
@@ -17,6 +18,8 @@ const refs = {
     loadMoreBtnText: document.querySelector('.load-button-text'),
     resetBtn: document.querySelector('.reset-button')
 }
+let scrollHieght = 0;
+
 
 const uploadImages = new UploadImageService;
 
@@ -31,19 +34,43 @@ loadMoreButton.refs.loadMoreBtn.addEventListener('click', fetchArticles);
 function onSearch(event) {
     event.preventDefault();
     uploadImages.query = event.currentTarget.elements.query.value;
-    
-    loadMoreButton.show();
+    uploadImages.showSpinner();
+    if (uploadImages.query === '') {
+        makeError();
+        uploadImages.hideSpinner();
+        clearArticlesContainer();
+        loadMoreButton.hide();
+    }
+    else {
+     scrollHieght = 0;
+        loadMoreButton.show();
+        
     clearArticlesContainer();
     uploadImages.resetPage();
-    fetchArticles();
+        fetchArticles();
+        
+    };
+    
+    
 }
 
 function fetchArticles() {
+
+    
     loadMoreButton.disable();
     uploadImages.fetchArticles().then(images => {
         appendImagesMarkup(images.hits);
         loadMoreButton.enable();
+        uploadImages.hideSpinner();
+        window.scrollTo({
+            left: 0,
+            top: scrollHieght,
+            behavior: 'smooth'
+        });
+        scrollHieght += 850;
+        
     })
+    
 }
 
 function appendImagesMarkup (imgArray) {
