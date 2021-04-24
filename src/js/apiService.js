@@ -21,12 +21,14 @@ export default class UploadImageService {
     async fetchArticles() {
         const url = `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.pageNumber}&per_page=12&key=${API_KEY}`;
 
-        const fetchData = await fetch(url);
-        const response = await fetchData.json().then(images => {
+        try {
+            const fetchData = await fetch(url);
+            const response = await fetchData.json();
             this.incrementPage();
-            return images;
-        });
-        return response;
+            return response;
+        } catch {
+            alert('Ooops!! Something going wrong');
+        }
     }
     
     incrementPage() {
