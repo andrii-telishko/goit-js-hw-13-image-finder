@@ -1,20 +1,24 @@
 import './styles.css';
 import galleryListTpl from './templates/image-list.hbs';
 import UploadImageService from './js/apiService';
-import LoadMoreButton from './js/loadMoreButtonService';
+// import LoadMoreButton from './js/loadMoreButtonService';
 import makeError from './js/makeError';
 import refs from './js/refs'
 
+
 const uploadImages = new UploadImageService;
-const loadMoreButton = new LoadMoreButton({
-  selector: '.load-more-btn',
-  hidden: true,
+ const observer = new IntersectionObserver(onObserve, {
+    rootMargin: '150px'
 });
-let scrollValue = 0;
+// const loadMoreButton = new LoadMoreButton({
+//   selector: '.load-more-btn',
+//   hidden: true,
+// });
+// let scrollValue = 0;
 
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreButton.refs.loadMoreBtn.addEventListener('click', fetchArticles);
-loadMoreButton.refs.goBackBtn.addEventListener('click', scrollUp);
+// loadMoreButton.refs.loadMoreBtn.addEventListener('click', fetchArticles);
+// loadMoreButton.refs.goBackBtn.addEventListener('click', scrollUp);
 refs.resetBtn.addEventListener('click', resetPage)
 
 function onSearch(event) {
@@ -28,30 +32,33 @@ function onSearch(event) {
         makeError();
         uploadImages.hideSpinner();
         clearArticlesContainer();
-        loadMoreButton.hide();
+        // loadMoreButton.hide();
     }
     else {
-     scrollValue = 0;
-        loadMoreButton.show();
+    //  scrollValue = 0;
+        // loadMoreButton.show();
+        observer.unobserve(refs.observe);
         clearArticlesContainer();
         uploadImages.resetPage();
         fetchArticles();
+        
     };
 }
 
 function fetchArticles() {
-    loadMoreButton.disable();
+    // loadMoreButton.disable();
     
     uploadImages.fetchArticles().then(({hits}) => {
         appendImagesMarkup(hits);
-        loadMoreButton.enable();
+        // loadMoreButton.enable();
         uploadImages.hideSpinner();
-        window.scrollTo({
-            left: 0,
-            top: scrollValue,
-            behavior: 'smooth'
-        });
-        scrollValue += 850;
+        observer.observe(refs.observe);
+        // window.scrollTo({
+        //     left: 0,
+        //     top: scrollValue,
+        //     behavior: 'smooth'
+        // });
+        // scrollValue += 850;
     })
 }
 
@@ -63,19 +70,30 @@ function clearArticlesContainer() {
   refs.imagesSection.innerHTML = '';
 }
 
-function scrollUp() {
-    window.scrollTo({
-            left: 0,
-            top: 0,
-            behavior: 'smooth'
-        });
-}
+// function scrollUp() {
+//     window.scrollTo({
+//             left: 0,
+//             top: 0,
+//             behavior: 'smooth'
+//         });
+// }
 
 function resetPage() {
     refs.input.value = "";
     clearArticlesContainer();
-    loadMoreButton.hide();
+    observer.unobserve(refs.observe);
+    // loadMoreButton.hide();
 }
+
+function onObserve (entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && uploadImages.query !== '') {
+            fetchArticles();
+      } 
+        
+    });
+}
+
 
 
 
